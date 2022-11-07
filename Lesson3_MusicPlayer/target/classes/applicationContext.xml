@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+<!--    То есть у нас есть класс TestBean, который находится в каталоге ry.sashaLy.
+        Мы хотим создать объект данного класса, соответственно, мы указываем уникальный
+        идентификатор создаваемого бина (в нашем случае testBean) и дальше указываем
+        объект какого класса будет создаваться в данном бине (class = "ru.sashaLy.TestBean"
+        И в следующем теге указываются аргументы конструктора, который находится в классе
+        class-->
+    <bean id="musicBean"
+          class="ru.sashaLy.JazzMusic">
+    </bean>
+
+    <bean id="musicPlayer"
+          class="ru.sashaLy.MusicPlayer">
+        <constructor-arg index="0" ref="musicBean"/>
+    </bean>
+
+<!--    <bean id="musicPlayer1"-->
+<!--          class="ru.sashaLy.MusicPlayer">-->
+<!--        <constructor-arg index="0" value="Music JazzMusic"/>-->
+<!--    </bean>-->
+
+
+</beans>
