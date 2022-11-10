@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+<!--    То есть у нас есть класс TestBean, который находится в каталоге ry.sashaLy.
+        Мы хотим создать объект данного класса, соответственно, мы указываем уникальный
+        идентификатор создаваемого бина (в нашем случае testBean) и дальше указываем
+        объект какого класса будет создаваться в данном бине (class = "ru.sashaLy.TestBean"
+        И в следующем теге указываются аргументы конструктора, который находится в классе
+        class-->
+
+<!--    Импортируем файл с ключами (mysicPlayer.properties) в конфигурационный файл-->
+    <context:property-placeholder location="classpath:musicPlayer.properties"/>
+
+    <bean id="jazzBean"
+          class="ru.sashaLy.JazzMusic">
+    </bean>
+
+    <bean id="classicalBean"
+            class="ru.sashaLy.ClassicalMusic">
+    </bean>
+
+    <bean id="rockBean"
+            class="ru.sashaLy.RockMusic">
+    </bean>
+
+    <bean id="musicPlayer"
+          class="ru.sashaLy.MusicPlayer">
+        <property name="musicList">
+          <list>
+              <ref bean="jazzBean"/>
+              <ref bean="classicalBean"/>
+              <ref bean="rockBean"/>
+          </list>
+        </property>
+
+        <property name="name" value="${musicPlayer.name}"/>
+        <property name="volume" value="100"/>
+    </bean>
+</beans>
