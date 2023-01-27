@@ -18,10 +18,10 @@ public class PersonDAO {
     {
         people = new ArrayList<>();
 
-        people.add(new Person(++PEOPLE_COUNT, "Sasha"));
-        people.add(new Person(++PEOPLE_COUNT, "Nikita"));
-        people.add(new Person(++PEOPLE_COUNT, "Alina"));
-        people.add(new Person(++PEOPLE_COUNT, "Tigran"));
+        people.add(new Person(++PEOPLE_COUNT, "Sasha", "Lyapanov", "sasha@mail.ru"));
+        people.add(new Person(++PEOPLE_COUNT, "Nikita", "Shilov", "nikita@mail.ru"));
+        people.add(new Person(++PEOPLE_COUNT, "Alina", "Belova", "alina@mail.ru"));
+        people.add(new Person(++PEOPLE_COUNT, "Tigran", "Melkonyan", "tigran@mail.ru"));
     }
 
 
@@ -34,6 +34,13 @@ public class PersonDAO {
     public Person show(int id) {
         //Использование лямбда выражений
         return people.stream().filter(person -> person.getId() == id).findAny().orElse(null);
+    }
+
+
+    //Метод добавления человека в список
+    public void save(Person person) {
+        person.setId(++PEOPLE_COUNT);
+        people.add(person);
     }
 
 }
