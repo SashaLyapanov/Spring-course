@@ -29,3 +29,31 @@
             jdbcTemplate.update("INSERT INTO Person VALUES(1, ?, ?, ?, ?)", person.getName(), person.getSurname(), person.getAge(), person.getEmail());
 
         }
+
+Также стоит отметить подключение к БД через конфигурационный файл, который называется database.properties (по факту его не надо было выкладывать на githab, но т.к. это учебный проект, то и таааак сойдет))). Необходимо сказать, что после создания данного файла нам необходимо внедрить данные в код (конфигурационный класс SpringConfig). Это мы делаем с помощью объекта класса Environment, который также инициализируем через конструктор класса:
+
+PropertySource("classpath:database.properties")
+public class SpringConfig implements WebMvcConfigurer {
+
+    private final ApplicationContext applicationContext;
+    private final Environment environment;
+
+    @Autowired
+    public SpringConfig(ApplicationContext applicationContext, Environment environment) {
+        this.applicationContext = applicationContext;
+        this.environment = environment;
+    }
+    
+А дальше при создании бина dataSource мы уже не вписываем напрямую данные для подключения к БД, а достаем данные из environment:
+        
+            @Bean
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+
+        dataSource.setDriverClassName(Objects.requireNonNull(environment.getProperty("driver")));
+        dataSource.setUrl(environment.getProperty("url"));
+        dataSource.setUsername(environment.getProperty("username_value"));
+        dataSource.setPassword(environment.getProperty("password"));
+
+        return dataSource;
+    }
