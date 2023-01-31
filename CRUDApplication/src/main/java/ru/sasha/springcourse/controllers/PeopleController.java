@@ -1,11 +1,16 @@
 package ru.sasha.springcourse.controllers;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.sasha.springcourse.dao.PersonDAO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import ru.sasha.springcourse.models.Person;
+
+import javax.validation.Valid;
+import java.sql.SQLException;
 
 @Controller
 @RequestMapping("/people")
@@ -19,7 +24,7 @@ public class PeopleController {
 
 
     @GetMapping()
-    public String index(Model model) {
+    public String index(Model model) throws SQLException {
         model.addAttribute("people", personDAO.index());
         return "people/index";
     }
@@ -34,15 +39,18 @@ public class PeopleController {
 
 
     @GetMapping("/new")
-    public String newPerson(Model model) {
-        Person person = new Person();
-        model.addAttribute("person", person);
+    public String newPerson(@ModelAttribute("person") Person person) {
         return "people/new";
     }
 
 
     @PostMapping()
-    public String create(@ModelAttribute("person") Person person) {
+    public String create(@ModelAttribute("person") @Valid Person person,
+                         BindingResult bindingResult) throws SQLException {
+        if (bindingResult.hasErrors()) {
+            return "people/new";
+        }
+
         personDAO.save(person);
 
         return "redirect:/people";
@@ -56,17 +64,20 @@ public class PeopleController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("person") Person person,
+    public String update(@ModelAttribute("person") @Valid Person person,
+                         BindingResult bindingResult,
                          @PathVariable("id") int id) {
+        if (bindingResult.hasErrors()) {
+            return "people/edit";
+        }
+
         personDAO.update(id, person);
         return "redirect:/people";
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") int id) throws SQLException {
         personDAO.delete(id);
         return "redirect:/people";
     }
-
-
 }
