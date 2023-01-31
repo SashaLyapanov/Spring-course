@@ -17,10 +17,13 @@
 5) используя методы .query или .update создать необходимые методы DAO шаблона
         Например:
         //Метод, возвращающий всех людей из БД
+        
         public List<Person> index() {
             return jdbcTemplate.query("SELECT * FROM Person", new BeanPropertyRowMapper<>(Person.class));
         }
+        
        //Метод добавления человека в список
+       
         public void save(Person person) {
             // можно так написать, т.к. метод update поддерживает внесение множества аргументов, которые будут рассмотрены, как массив данных, которые неободимо вставить
             jdbcTemplate.update("INSERT INTO Person VALUES(1, ?, ?, ?, ?)", person.getName(), person.getSurname(), person.getAge(), person.getEmail());
