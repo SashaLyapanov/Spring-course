@@ -1,5 +1,24 @@
-#CRUDwithJSBC_API
-В данной ветке располагается проект, демонстрирующий работу с JDBC Template. Данную технологию предоставляет Spring Framework, как обертку над JDBC API. С помощью JDBC Template мы избавляемся от минусов JDBC API, что позволяет нам уменьшить количество кода и избавиться от повторяющегося кода.
+#Batch Update
+Batch Update - это технология, позволяющая выполнять пакетное обновление данных в БД. Имеется ввиду, что раньше мы могли добавлять данные в БД с помощью отдельных запросов на вставку конкретного объекта. Например ("INSERT INTO Person VALUES (?, ?, ?)", person.getId(), person.getName(), person.getSurname());. А если же нам надо было бы вставить большой объем данных (напирмер вставвка 1000 записей), то мы бы должны были выполнить 1000 транзакций к БД, что неправильно, т.к. это огромная нагрузка на сеть, а также затрата времени, т.к. БД не может распараллелить отдельные запросы. Так вот, Batch Update является способом вставки большого объема данных через 1 запрос. Для этого нам необходимо:
+1) Создаем список, содержащий все объекты, которые хотим вставить в БД.
+        List<Person> people = new ArrayList<>();
+2) А далее пишем через PreparedStatement и объект класса JdbcTemplate!!!:
+        jdbcTemplate.batchUpdate("INSERT INTO Person VALUES(?,?,?)", new BatchPreparedStatement() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException{
+                ps.setInt(1, people.get(i).getId());
+                ps.setString(2, people.get(i).getName());
+                ps.setString(3, people.get(i).getSurname());
+            }
+            
+            @Override
+            public int getBatchSize() {
+                return people.size();
+            }
+        });
+
+
+Также в данной ветке располагается проект, демонстрирующий работу с JDBC Template. Данную технологию предоставляет Spring Framework, как обертку над JDBC API. С помощью JDBC Template мы избавляемся от минусов JDBC API, что позволяет нам уменьшить количество кода и избавиться от повторяющегося кода.
 Для работы с данной технологией нам необходимо сделать следующие вещи:
 1) Докачать зависимость: spring-jdbc через pom.xml
 2) в конфигурационном классе создать бин источника данных (DataSource), который будет возвращать объект со всеми данными для подключения к БД (Url, driverClass, username, password)
