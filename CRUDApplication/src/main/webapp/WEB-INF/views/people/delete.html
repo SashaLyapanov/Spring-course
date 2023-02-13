@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Deleting person</title>
+</head>
+<body>
+    <h3>Вы уверены, что хотите удалить данного человека?</h3>
+    <p>Если да, нажмите Удалить, иначе Отмена</p>
+    <form th:method="DELETE" th:action="@{/people/{id}(id = ${person.getId()})}">
+        <input type="submit" value="Удалить">
+        <button><a th:href="@{/people}">Отмена</a></button>
+    </form>
+</body>
+</html>
