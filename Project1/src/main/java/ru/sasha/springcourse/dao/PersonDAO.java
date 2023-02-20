@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.sasha.springcourse.models.Person;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class PersonDAO {
@@ -23,8 +24,8 @@ public class PersonDAO {
     }
 
     //Метод для чтения человека по Email
-    public Person personToEmail(String email) {
-        return jdbcTemplate.query("SELECT * FROM person WHERE email=?", new Object[]{email}, new PersonMapper()).stream().findAny().orElse(null);
+    public Optional<Person> personToEmail(String email) {
+        return jdbcTemplate.query("SELECT * FROM person WHERE email=?", new Object[]{email}, new PersonMapper()).stream().findAny();
     }
 
     //Метод для чтения человека по ID
@@ -53,5 +54,8 @@ public class PersonDAO {
     public Person personToBookId(int id) {
         return jdbcTemplate.query("SELECT * FROM person WHERE id = (SELECT personId FROM book WHERE id = ?)", new Object[]{id}, new PersonMapper()).stream().findAny().orElse(null);
     }
+
+
+
 
 }
