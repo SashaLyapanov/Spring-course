@@ -8,6 +8,7 @@ import ru.sasha.springcourse.dao.PersonDAO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import ru.sasha.springcourse.models.Person;
+import ru.sasha.springcourse.util.PersonValidator;
 
 import javax.validation.Valid;
 import java.sql.SQLException;
@@ -16,15 +17,18 @@ import java.sql.SQLException;
 @RequestMapping("/people")
 public class PeopleController {
 
-    private final  PersonDAO personDAO;
+    private final PersonDAO personDAO;
+    private final PersonValidator personValidator;
+
     @Autowired
-    public PeopleController(PersonDAO personDAO) {
+    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
         this.personDAO = personDAO;
+        this.personValidator = personValidator;
     }
 
 
     @GetMapping()
-    public String index(Model model) throws SQLException {
+    public String index(Model model) {
         model.addAttribute("people", personDAO.index());
         return "people/index";
     }
@@ -47,6 +51,9 @@ public class PeopleController {
     @PostMapping()
     public String create(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult) throws SQLException {
+        //bindingResult - Это объект, в который мы записываем и храним все ошибки валидаций (как с формы, так и с personValidator
+        personValidator.validate(person, bindingResult);
+
         if (bindingResult.hasErrors()) {
             return "people/new";
         }
@@ -67,6 +74,9 @@ public class PeopleController {
     public String update(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult,
                          @PathVariable("id") int id) {
+        //Проверка person на валидацию email'а через personValidator
+        personValidator.validate(person, bindingResult);
+
         if (bindingResult.hasErrors()) {
             return "people/edit";
         }

@@ -31,6 +31,12 @@
       Error in Email
     </div>
     <br>
+    <label for="address">Address</label>
+    <input name="address" type="text" th:field="*{address}" id="address" />
+    <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">
+      Error in Address
+    </div>
+    <br>
     <input type="submit" value="Update!" />
   </form>
 

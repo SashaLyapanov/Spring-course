@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.orh">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>New person</title>
@@ -30,6 +30,12 @@
       <input name="email" type="text" th:field="*{email}" id="email" />
       <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
           Error in email
+      </div>
+      <br>
+      <label for="address">Address</label>
+      <input name="address" type="text" th:field="*{address}" id="address" />
+      <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">
+          Error in address
       </div>
       <br>
       <input type="submit" value="Add person" />

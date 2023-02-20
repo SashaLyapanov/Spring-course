@@ -18,23 +18,31 @@ public class Person {
     @Size(min=2, max=30, message = "Name should be between 2 and 30 characters")
     private String surname;
 
-    @Positive(message = "Your age is not allowed")
+    @PositiveOrZero(message = "Your age is not allowed")
     private int age;
 
     @NotEmpty(message = "Email should not be empty!")
     @Email(message = "Email should be valid")
     private String email;
 
+    //Структура адреса:
+    //Страна, Город, почтовый индекск(6 цифр)
+    //Россия, Владимир, 600377
+    //Аннотация Pattern внедряется через использование регулярных выражений
+    @Pattern(regexp = "[A-Z]\\w+, [A-Z]\\w+, \\d{6}", message = "Адрес должен придерживаться формату: Страна, Город, индекс (6 цифр)")
+    private String address;
+
     //Пустой конструктор
     public Person() { }
 
     //Нормальный конструктор
-    public Person(int id, String name, String surname, int age, String email) {
+    public Person(int id, String name, String surname, int age, String email, String address) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.age = age;
         this.email= email;
+        this.address = address;
     }
 
     public int getId() {
@@ -72,4 +80,6 @@ public class Person {
         this.email = email;
     }
 
+    public String getAddress() {return address;}
+    public void setAddress(String address) {this.address = address;}
 }
