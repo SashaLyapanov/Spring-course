@@ -1,4 +1,8 @@
-# Maven Project with Hibernate
-В данном проекте в главном классе продемонстрированы методы для изменения сущности в БД, а также ее удаления из БД.
-Изменение сущности происходит следующим образом: мы с помощью Person person1 =  session.get(Person.class, 3) получаем определенную сущность из БД, после чего с помощью метода сеттора изменяем нужные поля, например, person1.setName("Sasha"); в результате чего Hibernate сам изменит запись в БД.
-А удаление происходит с помощью session.delete(person1); в результате чего будет удалена запись, соответствующая сущности person1 из БД.
+# Maven Project with Hibernate And Entity Relation Many To One
+В данном проекте реализована связь между сущностями Один ко многим.
+В Hibernate это реализуется посредством использования аннотиций:
+На дочерней сущности (которая Many): @ManyToOne, @JoinColumn(name = "columnName", referencedColumnName = "column name in main entity")
+                                     private Person owner;
+                                     
+На главной сущности (которая One): @OneToMany(mappedBy = "название поля, в дочерней сущности (owner)")
+                                   private List<Item> items; 
