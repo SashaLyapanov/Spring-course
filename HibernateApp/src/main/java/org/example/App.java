@@ -21,14 +21,21 @@ public class App
         Session session = sessionFactory.getCurrentSession();
 
         try {
-            Person person1 = new Person("Tigran", 20);
-            Person person2 = new Person("Alina", 20);
-            Person person3 = new Person("Senya", 21);
             session.beginTransaction();
 
-            session.save(person1);
-            session.save(person2);
-            session.save(person3);
+            //Изменение человека в БД
+//            Person person = session.get(Person.class, 2);
+//            person.setName("Gena");
+            //Удаление человека из БД
+//            session.delete(person);
+
+            //Получние id человека, после того, как записали его в БД
+            Person person = new Person("Some Name", 30);
+            session.save(person);
+            System.out.println(person.getId());
+
+
+
 
             session.getTransaction().commit();
         }
