@@ -7,6 +7,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import javax.imageio.plugins.jpeg.JPEGImageReadParam;
+import java.util.List;
+
 /**
  * Hello world!
  *
@@ -23,21 +26,33 @@ public class App
         try {
             session.beginTransaction();
 
-            //Изменение человека в БД
-//            Person person = session.get(Person.class, 2);
-//            person.setName("Gena");
-            //Удаление человека из БД
-//            session.delete(person);
+            //Получаем список людей, у которыйх возраст больше 20
+            List<Person> people1 = session.createQuery("FROM Person WHERE age > 20").getResultList();
+            //Получаем список людей, у которых имя начинается на S
+            List<Person> people2 = session.createQuery("FROM Person WHERE name LIKE 'S%'").getResultList();
+            //Выполняем обновление всех людей, у которых возраст больше 20 (теперь у них имя Test)
+            session.createQuery("update Person set name='TestName' where age > 20").executeUpdate();
+            List<Person> people3 = session.createQuery("FROM Person WHERE name = 'TestName'").getResultList();
 
-            //Получние id человека, после того, как записали его в БД
-            Person person = new Person("Some Name", 30);
-            session.save(person);
-            System.out.println(person.getId());
-
-
-
+            //Удаление записей из БД
+            session.createQuery("DELETE FROM Person WHERE name = 'TestName'").executeUpdate();
 
             session.getTransaction().commit();
+
+            System.out.println("Список людей, у которых возраст больше 20");
+            for (Person person: people1) {
+                System.out.println(person);
+            }
+
+            System.out.println("Список людей, у которых имя начинается на S");
+            for(Person person: people2) {
+                System.out.println(person);
+            }
+
+            System.out.println("Список людей, у которых возраст больше 20, но после редактирования их имени на TestName");
+            for(Person person: people3) {
+                System.out.println(person);
+            }
         }
 
         finally {
