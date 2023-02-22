@@ -1,11 +1,4 @@
 # Maven Project with Hibernate
-В данном проекте показано, как добавлять сущности в БД (сохранять) с помощью Hibernate. Причем используется автоинкремент для id.
-Показано использование аннотаций @GeneratedValue(strategy = GenerationType.IDENTITY)
-Также есть @GeneratedValue(strategy = GenerationType.SEQUENCE), которая используется, если при создании таблицы в БД не было указано, что поле автоинкрементируется. Также для этого необходимо при создании таблицы в БД создать для нее sequence, который связывается с полем в Java коде следующим образом:
-
-@GeneratedValue(strategy = GenerationType.SEQUENCE,
-                generator = "personId_sequence")
-@SecuenceGenerator(name = "personId_sequence",
-                   sequenceName = "person_seq",
-                   allocationSize = 1)
-private int id;
+В данном проекте в главном классе продемонстрированы методы для изменения сущности в БД, а также ее удаления из БД.
+Изменение сущности происходит следующим образом: мы с помощью Person person1 =  session.get(Person.class, 3) получаем определенную сущность из БД, после чего с помощью метода сеттора изменяем нужные поля, например, person1.setName("Sasha"); в результате чего Hibernate сам изменит запись в БД.
+А удаление происходит с помощью session.delete(person1); в результате чего будет удалена запись, соответствующая сущности person1 из БД.
