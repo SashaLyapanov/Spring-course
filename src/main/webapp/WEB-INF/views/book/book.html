@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book</title>
+</head>
+<body>
+
+    <h1 style="color: darkslategrey" th:text="'Книга № ' + ${book.getId()}"></h1>
+    <label style="font-weight: bold">Название:</label>
+    <p th:text="${book.getName()}"></p>
+    <label style="font-weight: bold">Автор:</label>
+    <p th:text="${book.getAuthor()}"></p>
+    <label style="font-weight: bold">Год выпуска:</label>
+    <p th:text="${book.getYear()}"></p>
+
+
+    <div th:if="${book.getPersonId() > 0}">
+        <form th:method="PATCH" th:action="@{/books/{id}/free(id = ${book.getId()})}" th:object="${book}">
+            <p th:text="'Книга сейчас у: ' + ${personBook.getSurname()} + ' ' + ${personBook.getName()} + ' ' + ${personBook.getPatronymic()}"></p>
+            <input type="submit" value="Освободить книгу" />
+        </form>
+    </div>
+
+    <div th:if="${book.getPersonId() == null}">
+        <p>Эта книга свободна. Кому назначить ее?</p>
+        <form th:method="POST" th:action="@{/books/{id}/assign(id = ${book.getId()})}">
+            <label th:for="person">Выберите человека:</label>
+            <select id="person" th:object="${person}" th:field="*{id}">
+                <option th:each="person: ${people}" th:value="${person.getId()}"
+                        th:text="${person.getSurname()} + ' ' + ${person.getName()} + ' ' + ${person.getPatronymic()}">
+                </option>
+            </select>
+            <input type="submit" value="Назначить читателя" />
+        </form>
+    </div>
+
+
+</body>
+</html>
